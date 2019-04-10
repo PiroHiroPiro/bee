@@ -1,8 +1,9 @@
 #!/bin/sh
 
+# ----- bee -----
 if [ $# = 0 ]; then
   echo "need argument 'COMMAND'" 1>&2
-  exit 0   
+  exit 0
 else
   COMMAND=$*
 fi
@@ -20,18 +21,34 @@ else
   COLOR="#ff0000";
 fi
 
-WEBHOOKURL="WebhockのURL入れてね"
-#slack 送信チャンネル
+# Webhook URL
+WEBHOOKURL="YOUR_SLACK_WEBHOOK_URL"
+# Slack Channel
 CHANNEL=${CHANNEL:-"#general"}
-#slack 送信名
+# BOT NAME
 BOTNAME=${BOTNAME:-"Bee"}
-#slack アイコン
+# Slack BOT Icon
 FACEICON=${FACEICON:-":bee:"}
-#メッセージ
+# Message
 WEBMESSAGE="Command: ${COMMAND}\nStart time: ${start}\nEnd time: ${end}"
-#メンションするユーザ
+# Mention User
 MENTION_USER="@channel"
 
-curl -s -S -X POST --data-urlencode "payload={\"channel\": \"${CHANNEL}\", \"username\": \"${BOTNAME}\", \"text\": \"${MENTION_USER}\", \"icon_emoji\": \"${FACEICON}\", \"attachments\": [ {\"title\": \"${MESSAGE}\", \"text\": \"${WEBMESSAGE}\", \"color\": \"${COLOR}\"}] }" ${WEBHOOKURL} >/dev/null
+curl -s -S -X POST --data-urlencode "payload={\"channel\": \"${CHANNEL}\", \"username\": \"${BOTNAME}\", \"text\": \"${MENTION_USER}\", \"icon_emoji\": \"${FACEICON}\", \"attachments\": [ {\"title\": \"${MESSAGE}\", \"text\": \"${WEBMESSAGE}\", \"color\": \"${COLOR}\"}] }" ${WEBHOOKURL} > /dev/null
+# ----- bee -----
+
+# ----- beetle -----
+
+# Log directory
+LOG_DIR=YOUR_LOG_DIR
+# Slack BOT Token
+BEETLE_TOKEN="YOUR_SLACK_BOT_TOKEN"
+# Slack Channel ID
+CHANNEL_ID=YOUR_SLACK_CHANNEL_ID
+
+LOG_FILE=`ls -ltr ${LOG_DIR} | tail -1 | awk '{print $9}'`
+curl -s -S -F file=@"${LOG_DIR}""${LOG_FILE}" -F channels="${CHANNEL_ID}" -F filename="${LOG_FILE}" -F filetype=text -H "Authorization: Bearer ${BEETLE_TOKEN}" https://slack.com/api/files.upload > /dev/null
+
+# ----- beetle -----
 
 exit 0
