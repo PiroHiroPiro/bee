@@ -32,7 +32,7 @@ curl -X POST \
   -d "text=<@${MENTION_USER}>" \
   -d "attachments=[ {\"title\": \"${RESULT}\", \"text\": \"${MESSAGE}\", \"color\": \"${COLOR}\"}]" \
   -d "icon_emoji=:beetle:" \
-  "https://slack.com/api/chat.postMessage"
+  https://slack.com/api/chat.postMessage > /dev/null
 
 # Log file name
 LOG_FILE_NAME=`ls -ltr ${LOG_DIR} | tail -1 | awk '{print $9}'`
