@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# ----- bee -----
 if [ $# = 0 ]; then
   echo "need argument 'COMMAND'" 1>&2
   exit 0
@@ -14,41 +13,36 @@ status=$?
 end="`date '+%y/%m/%d %H:%M:%S'`"
 
 if [ $status = 0 ]; then
-  MESSAGE="Success!!!!";
+  RESULT="Success!!!!";
   COLOR="#00ff00";
 else
-  MESSAGE="Failed....";
+  RESULT="Failed....";
   COLOR="#ff0000";
 fi
 
-# Webhook URL
-WEBHOOKURL="YOUR_SLACK_WEBHOOK_URL"
-# Slack Channel
-CHANNEL=${CHANNEL:-"#general"}
-# BOT NAME
-BOTNAME=${BOTNAME:-"Bee"}
-# Slack BOT Icon
-FACEICON=${FACEICON:-":bee:"}
+# import .env
+. .env
+
 # Message
-WEBMESSAGE="Command: ${COMMAND}\nStart time: ${start}\nEnd time: ${end}"
-# Mention User
-MENTION_USER="@channel"
+MESSAGE="Command: ${COMMAND}\nStart time: ${start}\nEnd time: ${end}"
 
-curl -s -S -X POST --data-urlencode "payload={\"channel\": \"${CHANNEL}\", \"username\": \"${BOTNAME}\", \"text\": \"${MENTION_USER}\", \"icon_emoji\": \"${FACEICON}\", \"attachments\": [ {\"title\": \"${MESSAGE}\", \"text\": \"${WEBMESSAGE}\", \"color\": \"${COLOR}\"}] }" ${WEBHOOKURL} > /dev/null
-# ----- bee -----
+curl -X POST \
+  -H "Authorization: Bearer ${BOT_TOKEN}" \
+  -d "channel=${CHANNEL_ID}" \
+  -d "text=<@${MENTION_USER}>" \
+  -d "attachments=[ {\"title\": \"${RESULT}\", \"text\": \"${MESSAGE}\", \"color\": \"${COLOR}\"}]" \
+  -d "icon_emoji=:beetle:" \
+  "https://slack.com/api/chat.postMessage"
 
-# ----- beetle -----
+# Log file name
+LOG_FILE_NAME=`ls -ltr ${LOG_DIR} | tail -1 | awk '{print $9}'`
 
-# Log directory
-LOG_DIR=YOUR_LOG_DIR
-# Slack BOT Token
-BEETLE_TOKEN="YOUR_SLACK_BOT_TOKEN"
-# Slack Channel ID
-CHANNEL_ID=YOUR_SLACK_CHANNEL_ID
-
-LOG_FILE=`ls -ltr ${LOG_DIR} | tail -1 | awk '{print $9}'`
-curl -s -S -F file=@"${LOG_DIR}""${LOG_FILE}" -F channels="${CHANNEL_ID}" -F filename="${LOG_FILE}" -F filetype=text -H "Authorization: Bearer ${BEETLE_TOKEN}" https://slack.com/api/files.upload > /dev/null
-
-# ----- beetle -----
+curl -s -S \
+  -F file=@"${LOG_DIR}""${LOG_FILE}" \
+  -F channels="${CHANNEL_ID}" \
+  -F filename="${LOG_FILE}" \
+  -F filetype=text \
+  -H "Authorization: Bearer ${BOT_TOKEN}" \
+  https://slack.com/api/files.upload > /dev/null
 
 exit 0
