@@ -26,7 +26,7 @@ fi
 # Message
 MESSAGE="Command: ${COMMAND}\nStart time: ${start}\nEnd time: ${end}"
 
-curl -X POST \
+curl -s -S -X POST \
   -H "Authorization: Bearer ${BOT_TOKEN}" \
   -d "channel=${CHANNEL_ID}" \
   -d "text=<@${MENTION_USER}>" \
