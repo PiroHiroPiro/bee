@@ -38,11 +38,11 @@ curl -X POST \
 LOG_FILE_NAME=`ls -ltr ${LOG_DIR} | tail -1 | awk '{print $9}'`
 
 curl -s -S \
-  -F file=@"${LOG_DIR}""${LOG_FILE}" \
+  -H "Authorization: Bearer ${BOT_TOKEN}" \
   -F channels="${CHANNEL_ID}" \
+  -F file=@"${LOG_DIR}""${LOG_FILE}" \
   -F filename="${LOG_FILE}" \
   -F filetype=text \
-  -H "Authorization: Bearer ${BOT_TOKEN}" \
   https://slack.com/api/files.upload > /dev/null
 
 exit 0
