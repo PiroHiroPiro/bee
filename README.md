@@ -1,31 +1,54 @@
-
 # Beetle
-Slackに任意のコマンドの終了を通知する．
-また最新のログファイルも送信する．
-機械学習等の実行に時間のかかるプログラムを実行するときに利用する予定で作成した.
 
-### Setup
-1. Slack BOT Tokenの取得およびSlack Channel IDを調べる．
+This is a bot that sends command results and log file.
+
+# Usage
+
+Enter the command to be executed after `bee`.
+
+```console
+$ bee COMMAND
+```
+
+e.g.,
+```console
+$ bee python train.py --epoch 50
+```
+
+# Install
+
+Get Slack BOT Token and Slack Channel ID:
+
+refs(Japanese only):
 - [Slack App Directory](https://beetle.slack.com/apps)
 - [Slack — APIに使う「チャンネルID」を取得する方法](https://qiita.com/YumaInaura/items/0c4f4adb33eb21032c08)
 
+Clone repository:
+
+```console
+$ git clone https://github.com/PiroHiroPiro/beetle.git
+$ cd beetle
 ```
-$ git clone https://github.com/PiroHiroPiro/bee.git
-$ cd bee
+
+Copy env file:
+
+```console
 $ cp .env.example .env
 $ vim .env
+```
+
+Setup shell script:
+
+```console
 $ chmod +x bee.sh
 $ echo "alias bee=\"`pwd`/bee.sh\"" >> ~/.bashrc
 $ . ~/.bashrc
 ```
 
-### How to use
-```
-$ bee $COMMAND
-```
-COMMANDは任意のコマンド
+## Licence
 
-e.g.,
-```
-$ bee python train.py --epoch 50
-```
+This software is released under the MIT License, see [LICENSE](https://github.com/PiroHiroPiro/beetle/blob/master/LICENSE).
+
+## Author
+
+[Hiroyuki Nishizawa](https://github.com/PiroHiroPiro)
